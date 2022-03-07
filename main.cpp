@@ -1,5 +1,10 @@
 #include <iostream>
 #include <cstring>
+#include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <limits>
 
 using namespace std;
 
@@ -11,6 +16,8 @@ struct Node {
   float gpa;
 };
 
+void addStudent(Node* table[], int newID);
+
 int main() {
   cout << "welcome to studentlist" << endl;
   bool playing = true;
@@ -20,7 +27,8 @@ int main() {
     char input[10];
     cin >> input;
     if (strcmp(input, "ADD") == 0) {//Calls the add function
-      int i = hashFunction(returnID());
+      //int i = hashFunction(returnID());
+      int i = 5;
       addStudent(table, i);
     }
     else if (strcmp(input, "PRINT") == 0) {//Calls the print function
@@ -41,12 +49,29 @@ int hashFunction(int &num) {
 
 void addStudent(Node* table[], int newID) {
   cout << "Adding studnet" << endl;
-  table[newID]->firstName;
+  char input[20];
+  srand(time(NULL));
+  int num = rand() % 3 + 1;
+  cout << num << endl;
+  fstream myfile;
+  myfile.open("firstName.txt", ios::in);
+  if (!myfile) {
+    cout << "no file" << endl;
+  }
+  else {
+    for (int i = 0; i < num; i++) {
+      cin >> input;
+    }
+  }
+  cout << input << endl;
+  myfile.close();
+  
+  /*table[newID]->firstName;
   table[newID]->lastName;
   table[newID]->id;
   table[newID]->gpa;
   table[newID]->next = NULL;
-  cout << table[newID] << endl;
+  cout << table[newID] << endl;*/
 }
 
 void printStudent() {
