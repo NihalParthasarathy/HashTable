@@ -3,6 +3,8 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctime>
+#include <cstdlib>
 #include <time.h>
 #include <limits>
 
@@ -19,6 +21,7 @@ struct Node {
 void addStudent(Node* table[], int newID);
 
 int main() {
+  srand(time(0));
   cout << "welcome to studentlist" << endl;
   bool playing = true;
   Node* table[100];
@@ -49,12 +52,15 @@ int hashFunction(int &num) {
 
 void addStudent(Node* table[], int newID) {
   cout << "Adding studnet" << endl;
-  char input[20];
-  srand(time(NULL));
-  int num = rand() % 3 + 1;
+  char input[100];
+  char input2[100];
+  int num = (rand() % 20) + 1;
+  int num2 = (rand() % 20) + 1;
   cout << num << endl;
-  fstream myfile;
-  myfile.open("firstName.txt", ios::in);
+  cout << num2 << endl;
+  fstream myfile("firstName.txt");
+  fstream lastfile("lastName.txt");
+  /*myfile.open("firstName.txt", ios::in);
   if (!myfile) {
     cout << "no file" << endl;
   }
@@ -64,7 +70,23 @@ void addStudent(Node* table[], int newID) {
     }
   }
   cout << input << endl;
-  myfile.close();
+  myfile.close();*/
+  int count = 1;
+  while (myfile.getline(input,100, '\n')) {
+      if (count == num) {
+	cout << input << endl;
+	count++;
+      }
+      count++;
+  }
+  int count2 = 1;
+  while (lastfile.getline(input2,100, '\n')) {
+    if (count2 == num2) {
+      cout << input2 << endl;
+      count2++;
+    }
+    count2++;
+  }
   
   /*table[newID]->firstName;
   table[newID]->lastName;
