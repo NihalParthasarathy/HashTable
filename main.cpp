@@ -18,15 +18,15 @@ struct Node {
   float gpa;
 };
 
-void addStudent(Node* table[], int &newID, int nsize);
+Node** addStudent(Node** table, int &newID, int nsize);
 int hashF(int &num, int nsize);
-void printStudent(Node* table[], int nsize);
+void printStudent(Node** table, int nsize);
 
 int main() {
   srand(time(0));
   cout << "welcome to studentlist" << endl;
   bool playing = true;
-  Node* table[100];
+  Node** table = new Node*[100];
   int currID = 0;
   int size = 100;
   while (playing == true) {
@@ -53,7 +53,7 @@ int hashF(int &num, int nsize) {
   return num%nsize;
 }
 
-void addStudent(Node* table[], int &newID, int nsize) {
+Node** addStudent(Node** table, int &newID, int nsize) {
   cout << "How many students would you like to add" << endl;
   int numStudents;
   cin >> numStudents;
@@ -97,10 +97,10 @@ void addStudent(Node* table[], int &newID, int nsize) {
 	r += 1;
       }
     }
-    cout << firstNameTemp << endl;
+    /*cout << firstNameTemp << endl;
     cout << lastNameTemp << endl;
     cout << r << endl;
-    cout << newID << endl;
+    cout << newID << endl;*/
     
     strcpy(student->firstName, firstNameTemp);
     cout << student->firstName;
@@ -111,17 +111,24 @@ void addStudent(Node* table[], int &newID, int nsize) {
     if (table[hashF(newID, nsize)] == NULL) {
       table[hashF(newID, nsize)] = student;
     }
+    else if (table[hashF(newID, nsize)]->next != NULL) {
+      table[hashF(newID, nsize)]->next = student;
+    }
 
     newID++;
   }
+  return table;
 }
 
-void printStudent(Node* table[], int nsize) {
+void printStudent(Node** table, int nsize) {
   Node* curr;
   for (int i = 0; i < nsize; i++) {
     curr = table[i];
-    cout << curr->firstName << " " << curr->lastName << " ID:" << curr->id << " GPA:" << curr->gpa << endl;
+    if (curr != NULL) {
+      cout << curr->firstName << " " << curr->lastName << " ID:" << curr->id << " GPA:" << curr->gpa << endl;
+    }
   }
+  
 }
 
 void deleteStudent() {
