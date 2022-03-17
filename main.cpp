@@ -35,16 +35,19 @@ int main() {
   Node** table = new Node*[100];
   int currID = 0;
   int size = 100;
+  for (int i = 0; i < size; i++) {
+    table[i] = NULL;
+  }
   while (playing == true) {
-    cout << "would you like to add, print, delete or quit" << endl;
+    cout << "would you like to add(ADD), Manualy add(TYPE), print(PRINT), search print(SEARCH), delete(DELETE) or quit(QUIT)" << endl;
     char input[10];
     cin >> input;
     if (strcmp(input, "ADD") == 0) {//Calls the add function
       //int i = hashFunction(returnID());
-      addStudent(table, currID, size);
+      table = addStudent(table, currID, size);
     }
     else if (strcmp(input, "TYPE") == 0) {
-      typeStudent(table, currID, size);
+      table = typeStudent(table, currID, size);
     }
     else if (strcmp(input, "SEARCH") == 0) {
       searchPrint(table, size);
@@ -90,10 +93,10 @@ Node** typeStudent(Node** table, int &newID, int &nsize) {
     }
     table = rehash(table, nsize, newTable, newID);
     table[hashF(newID, nsize)]->next = student;
+    
   }
   newID++;
   return table;
-
 }
 
 Node** addStudent(Node** table, int &newID, int &nsize) {
@@ -106,15 +109,12 @@ Node** addStudent(Node** table, int &newID, int &nsize) {
     char input2[100];
     int num = (rand() % 20) + 1;
     int num2 = (rand() % 20) + 1;
-    cout << num << endl;
-    cout << num2 << endl;
     fstream myfile("firstName.txt");
     fstream lastfile("lastName.txt");
     char firstNameTemp[100];
     int count = 1;
     while (myfile.getline(input,100, '\n')) {
       if (count == num) {
-	cout << input << endl;
 	strcpy(firstNameTemp, input);
 	count++;
       }
@@ -125,7 +125,6 @@ Node** addStudent(Node** table, int &newID, int &nsize) {
     int count2 = 1;
     while (lastfile.getline(input2,100, '\n')) {
       if (count2 == num2) {
-	cout << input2 << endl;
 	strcpy(lastNameTemp, input2);
 	count2++;
       }
@@ -140,13 +139,8 @@ Node** addStudent(Node** table, int &newID, int &nsize) {
 	r += 1;
       }
     }
-    /*cout << firstNameTemp << endl;
-    cout << lastNameTemp << endl;
-    cout << r << endl;
-    cout << newID << endl;*/
     
     strcpy(student->firstName, firstNameTemp);
-    cout << student->firstName;
     strcpy(student->lastName, lastNameTemp);
     student->gpa = r;
     student->id = newID;
@@ -168,9 +162,9 @@ Node** addStudent(Node** table, int &newID, int &nsize) {
       table = rehash(table, nsize, newTable, newID);
       table[hashF(newID, nsize)]->next = student;
     }
-
     newID++;
   }
+  cout << "Added!" << endl;
   return table;
 }
 
@@ -234,16 +228,19 @@ Node** rehash(Node** table, int &nsize, Node** newTable, int ID) {
   nsize = nsize*2;
   for (int i = 0; i < ID; i++) {
     if (i < oSize) {
-      newTable[hashF(i, nsize)] = table[hashF(i, oSize)];
+      newTable[i] = table[i];
     }
     else if (i < oSize*2) {
-      newTable[hashF(i, nsize)] = table[hashF(i, oSize)]->next;
-      cout << table[101]->id << endl;
+      newTable[i] = table[hashF(i, oSize)]->next;
     }
     else {
       newTable[hashF(i, nsize)]->next = table[hashF(i, oSize)]->next->next;
     }
   }
+  for (int j = oSize; j < nsize; j++) {
+    newTable[j]->next = NULL;
+  }
+  
   return newTable;
 }
 
